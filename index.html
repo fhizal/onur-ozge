@@ -409,6 +409,27 @@ section{text-align:center}
   font-size:22px;
   color:var(--carmine);
 }
+.calbtn{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  width:fit-content;
+  margin:18px auto 0;
+  border:1px solid var(--carmine);
+  border-radius:2px;
+  background:none;
+  color:var(--carmine);
+  font-family:var(--sans);
+  font-size:13.5px;
+  font-weight:700;
+  letter-spacing:.04em;
+  padding:12px 20px;
+  cursor:pointer;
+}
+.calbtn:active{background:var(--carmine);color:#FBF3E9}
+.calbtn:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.calbtn svg{flex:none}
+#editBtn{margin-top:16px}
 .done-msg{
   font-style:italic;
   font-size:16px;
@@ -620,6 +641,14 @@ footer{text-align:center}
       <div id="lcvDone" hidden>
         <p class="done-line" id="doneText"></p>
         <p class="done-msg">Teşekkürler, katılımınızı not aldık. Sizi aramızda görmekten mutluluk duyacağız. 🌸</p>
+        <button type="button" class="calbtn" id="calBtn">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round">
+            <rect x="3.5" y="5.5" width="17" height="15" rx="2"/>
+            <path d="M3.5 10 h17 M8 3 v4 M16 3 v4"/>
+            <path d="M12 13.5 v4.5 M9.75 15.75 h4.5"/>
+          </svg>
+          Takvime Ekle
+        </button>
         <button type="button" class="copylink" id="editBtn">Yanıtı düzenle</button>
       </div>
     </section>
@@ -756,7 +785,7 @@ let pendingTimer = null;
 let pendingSubmit = false;
 
 function sendLabelText() {
-  if (CONFIG.apiUrl) return "LCV'yi Gönder";
+  if (CONFIG.apiUrl) return "Katılımımı Bildir";
   if (CONFIG.lcvPhone) return "WhatsApp ile LCV Gönder";
   return "LCV Mesajını Kopyala";
 }
@@ -810,7 +839,39 @@ $("lcvSink").addEventListener("load", () => {
   const name = $("guestName").value.trim();
   try { localStorage.setItem(LCV_KEY, JSON.stringify({ name: name, count: count })); } catch (e) {}
   showDone(name, count);
+  setTimeout(() => addToCalendar(false), 1200);
 });
+
+/* --- takvim: iPhone/masaüstü → .ics, Android → Google Takvim etkinlik kartı --- */
+function calendarUrls() {
+  const start = new Date(CONFIG.eventISO);
+  const end = new Date(start.getTime() + 3 * 3600 * 1000);
+  const fmt = d => d.toISOString().replace(/[-:]/g, "").replace(".000", "");
+  const loc = [CONFIG.venueName, CONFIG.venueAddress].filter(Boolean).join(", ");
+  return {
+    ics: "nisan.ics",
+    google: "https://calendar.google.com/calendar/render?action=TEMPLATE"
+      + "&text=" + encodeURIComponent("Onur & Özge — Nişan Töreni")
+      + "&dates=" + fmt(start) + "/" + fmt(end)
+      + "&details=" + encodeURIComponent("Davetiye: https://fhizal.github.io/onur-ozge/")
+      + (loc ? "&location=" + encodeURIComponent(loc) : "")
+  };
+}
+
+function addToCalendar(viaGesture) {
+  const urls = calendarUrls();
+  if (!/android/i.test(navigator.userAgent)) {
+    window.location.href = urls.ics;
+    return;
+  }
+  if (viaGesture) {
+    const win = window.open(urls.google, "_blank", "noopener");
+    if (win) return;
+  }
+  window.location.href = urls.google;
+}
+
+$("calBtn").addEventListener("click", () => addToCalendar(true));
 
 $("editBtn").addEventListener("click", () => {
   $("lcvFormUI").hidden = false;

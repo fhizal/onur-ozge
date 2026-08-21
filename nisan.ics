@@ -8,13 +8,13 @@ UID:nisan-onur-ozge-2026@fhizal.github.io
 DTSTAMP:20260814T120000Z
 DTSTART:20260823T230000Z
 DTEND:20260824T020000Z
-SUMMARY:Onur & Özge — Nişan Töreni
+SUMMARY:Özge & Onur — Nişan Töreni
 LOCATION:Taverna on the Hudson\, 1 Flagship St\, Bayonne\, NJ 07002
 DESCRIPTION:Davetiye: https://fhizal.github.io/onur-ozge/
 BEGIN:VALARM
 TRIGGER:-PT3H
 ACTION:DISPLAY
-DESCRIPTION:Onur & Özge'nin nişanına 3 saat kaldı 🌸
+DESCRIPTION:Özge & Onur'un nişanına 3 saat kaldı 🌸
 END:VALARM
 END:VEVENT
 END:VCALENDAR

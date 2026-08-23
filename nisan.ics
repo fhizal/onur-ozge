@@ -10,6 +10,7 @@ DTSTART:20260823T230000Z
 DTEND:20260824T020000Z
 SUMMARY:Özge & Onur — Nişan Töreni
 LOCATION:Taverna on the Hudson\, 1 Flagship St\, Bayonne\, NJ 07002
+GEO:40.670236;-74.100765
 DESCRIPTION:Davetiye: https://fhizal.github.io/onur-ozge/
 BEGIN:VALARM
 TRIGGER:-PT3H
